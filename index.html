@@ -1,64 +1,411 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentinsfrage </title>
-<style>
-body {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #ff758c, #ff7eb3);
-    color: white;
-    margin-top: 120px;
-    overflow: hidden;
-}
-h1 {
-    font-size: 2.5em;
-}
-button {
-    padding: 15px 30px;
-    font-size: 18px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    margin: 20px;
-    transition: 0.3s;
-}
-#yes {
-    background-color: white;
-    color: #ff4d6d;
-}
-#yes:hover {
-    transform: scale(1.1);
-}
-#no {
-    background-color: #ff4d6d;
-    color: white;
-    position: absolute;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willst du mein Valentin's Date sein? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff69b4 0%, #ffb6d9 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating Text Background */
+        .floating-text {
+            position: fixed;
+            font-size: 2em;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 15s infinite linear;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px) rotate(5deg);
+            }
+            100% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+        }
+
+        /* Luftballons Animation */
+        .balloon-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .balloon {
+            position: absolute;
+            width: 50px;
+            height: 70px;
+            border-radius: 50% 50% 50% 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            animation: float-balloon 6s ease-in forwards;
+            opacity: 0.9;
+        }
+
+        .balloon.red {
+            background: #ff4444;
+            transform: rotate(-45deg);
+        }
+
+        .balloon.pink {
+            background: #ff69b4;
+            transform: rotate(-45deg);
+        }
+
+        .balloon.purple {
+            background: #da70d6;
+            transform: rotate(-45deg);
+        }
+
+        @keyframes float-balloon {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(-45deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(-45deg);
+            }
+        }
+
+        /* Hauptbereich */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+            animation: fadeIn 1s ease-out 0.5s backwards;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #yes-button {
+            background: #4CAF50;
+            color: white;
+        }
+
+        #yes-button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        #no-button {
+            background: #f44336;
+            color: white;
+        }
+
+        #no-button:hover {
+            background: #da190b;
+            transform: scale(1.05);
+        }
+
+        /* Victory Message */
+        .victory-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            animation: victory 1s ease-out;
+            text-align: center;
+        }
+
+        .victory-message.show {
+            display: block;
+        }
+
+        @keyframes victory {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Emojis Animation */
+        .emoji-pop {
+            position: fixed;
+            font-size: 4em;
+            animation: popUp 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes popUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Click Counter */
+        .click-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            z-index: 20;
+        }
+    </style>
 </head>
 <body>
+    <!-- Floating Text Background -->
+    <div id="floatingTextContainer"></div>
 
-<h1>Willst du mein Valentinstag sein? </h1>
+    <!-- Luftballons Container -->
+    <div class="balloon-container" id="balloonContainer"></div>
 
-<button id="yes" onclick="answerYes()">Ja </button>
-<button id="no" onmouseover="moveNo()">Nein </button>
+    <!-- Click Counter -->
+    <div class="click-counter" id="clickCounter">0 / 5 ❤️</div>
 
-<script>
-function answerYes() {
-    document.body.innerHTML = "<h1>Yaaay!  Ich freue mich so sehr! </h1>";
-}
+    <!-- Hauptinhalt -->
+    <div class="content" id="content">
+        <h1>💕 Willst du mein Valentin's Date sein? 💕</h1>
+        
+        <div class="button-container">
+            <button id="yes-button">Ja ❤️</button>
+            <button id="no-button">Nein</button>
+        </div>
+    </div>
 
-function moveNo() {
-    const button = document.getElementById("no");
-    const x = Math.random() * window.innerWidth;
-    const y = Math.random() * window.innerHeight;
-    button.style.left = x + "px";
-    button.style.top = y + "px";
-}
-</script>
+    <!-- Victory Message -->
+    <div class="victory-message" id="victoryMessage">
+        Für immer mein Valentin's Date 💕✨
+    </div>
 
+    <script>
+        let clickCount = 0;
+        const MAX_CLICKS = 5;
+        const yesButton = document.getElementById('yes-button');
+        const noButton = document.getElementById('no-button');
+        const victoryMessage = document.getElementById('victoryMessage');
+        const balloonContainer = document.getElementById('balloonContainer');
+        const content = document.getElementById('content');
+        const clickCounter = document.getElementById('clickCounter');
+        const floatingTextContainer = document.getElementById('floatingTextContainer');
+
+        // Floating Text erstellen
+        function createFloatingText() {
+            const text = document.createElement('div');
+            text.classList.add('floating-text');
+            text.textContent = 'D+S 31.12.2021';
+            
+            // Zufällige Position
+            const randomX = Math.random() * (window.innerWidth - 200);
+            const randomY = Math.random() * (window.innerHeight - 100);
+            text.style.left = randomX + 'px';
+            text.style.top = randomY + 'px';
+            
+            // Zufällige Animation Dauer
+            const duration = 10 + Math.random() * 10;
+            text.style.animationDuration = duration + 's';
+            
+            // Zufällige Verzögerung
+            text.style.animationDelay = Math.random() * 5 + 's';
+            
+            floatingTextContainer.appendChild(text);
+        }
+
+        // Initial floating texts erstellen
+        for (let i = 0; i < 12; i++) {
+            createFloatingText();
+        }
+
+        // Regelmäßig neue floating texts erstellen
+        setInterval(createFloatingText, 3000);
+
+        // Luftballons beim Laden erstellen
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+            
+            // Zufällige Farbe
+            const colors = ['red', 'pink', 'purple'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            balloon.classList.add(randomColor);
+            
+            // Zufällige Position
+            const randomLeft = Math.random() * 100;
+            balloon.style.left = randomLeft + '%';
+            balloon.style.bottom = '-100px';
+            
+            // Animation Dauer
+            const duration = 4 + Math.random() * 2;
+            balloon.style.animationDuration = duration + 's';
+            
+            // Herz-Emoji
+            balloon.textContent = '❤️';
+            
+            balloonContainer.appendChild(balloon);
+            
+            // Entfernen nach Animation
+            setTimeout(() => balloon.remove(), duration * 1000);
+        }
+
+        // Alle 300ms einen Luftballon erstellen
+        setInterval(createBalloon, 600);
+
+        // Ja-Button Click Handler
+        yesButton.addEventListener('click', function() {
+            if (clickCount < MAX_CLICKS) {
+                clickCount++;
+                
+                // Click Counter aktualisieren
+                clickCounter.textContent = clickCount + ' / 5 ❤️';
+                
+                // Button vergrößern
+                const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+                yesButton.style.fontSize = (currentSize + 8) + 'px';
+                yesButton.style.padding = (15 + clickCount * 5) + 'px ' + (40 + clickCount * 8) + 'px';
+                
+                // Herzaugen-Emoji erstellen
+                createEmojiPop(event.clientX, event.clientY);
+                
+                // Victory nach 5 Clicks
+                if (clickCount === MAX_CLICKS) {
+                    // Frage und Buttons ausblenden nach kurzer Zeit
+                    setTimeout(() => {
+                        content.style.opacity = '0';
+                        content.style.transition = 'opacity 0.5s ease-out';
+                        content.style.pointerEvents = 'none';
+                    }, 500);
+                    
+                    // Victory Message nach 2 Sekunden anzeigen
+                    setTimeout(() => {
+                        victoryMessage.classList.add('show');
+                        
+                        // Viele Herzaugen-Emojis nach Victory
+                        for (let i = 0; i < 15; i++) {
+                            setTimeout(() => {
+                                const randomX = Math.random() * window.innerWidth;
+                                const randomY = Math.random() * window.innerHeight;
+                                createEmojiPop(randomX, randomY);
+                            }, i * 150);
+                        }
+                    }, 2000);
+                }
+            }
+        });
+
+        // Nein-Button Click Handler
+        noButton.addEventListener('click', function() {
+            // Nein-Button bewegt sich weg
+            const randomX = Math.random() * (window.innerWidth - 100);
+            const randomY = Math.random() * (window.innerHeight - 100);
+            noButton.style.position = 'fixed';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        });
+
+        // Emoji Pop Animation - HERZAUGEN
+        function createEmojiPop(x, y) {
+            const emoji = document.createElement('div');
+            emoji.classList.add('emoji-pop');
+            emoji.textContent = '😍';
+            emoji.style.left = x + 'px';
+            emoji.style.top = y + 'px';
+            
+            document.body.appendChild(emoji);
+            
+            // Entfernen nach Animation
+            setTimeout(() => emoji.remove(), 2000);
+        }
+
+        // Initial Balloons
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createBalloon(), i * 200);
+        }
+    </script>
 </body>
+
 </html>
